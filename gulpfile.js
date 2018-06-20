@@ -15,7 +15,7 @@ var path = require('path');
 var json = require('./data/data.json');
 
 // 起服务
-gulp.task('server', function() {
+gulp.task('server', ['devsass'], function() {
     gulp.src('src')
         .pipe(server({
             port: 8888,
@@ -35,8 +35,20 @@ gulp.task('server', function() {
         }))
 });
 
+gulp.task('devsass', function() {
+    return gulp.src('src/sass/*.scss')
+        .pipe(sass())
+        .pipe(clean())
+        .pipe(gulp.dest('src/css'))
+});
+
+// 监听
+gulp.task('watch', function() {
+    gulp.watch('src/sass/*.scss', ['devsass']);
+})
+
 // sass编译 压缩 打包
-gulp.task('sass', function() {
+gulp.task('buildsass', function() {
     return gulp.src('src/sass/*.scss')
         .pipe(sass())
         .pipe(clean())
@@ -61,6 +73,7 @@ gulp.task('htmlmin', function() {
         .pipe(gulp.dest('build'))
 });
 
+// 打包 上线
 gulp.task('build', function(cb) {
-    sequence('sass', 'uglify', 'copyJs', 'htmlmin', cb);
+    sequence('buildsass', 'uglify', 'copyJs', 'htmlmin', cb);
 })

@@ -35,10 +35,6 @@ gulp.task('server', function() {
         }))
 });
 
-// gulp.task('watch', function() {
-//     gulp.watch('src/sass/*.scss', [])
-// })
-
 // sass编译 压缩 打包
 gulp.task('sass', function() {
     return gulp.src('src/sass/*.scss')
